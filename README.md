@@ -8,6 +8,7 @@ Does not provide performance. It can serve as a guide for studying packages and 
 ## System requirements:
 - Stable connection to internet
 - Python 3.9.X in PATH
+- Windows 10 and newer (Linux, MacOS unsupported)
 
 ## How to Use:
-If you on Linux run `setupenv.sh` and run python file using `./venv/Scripts/python3 DOSer.py`, on Windows run `setup.bat` and run python file using `.\venv\Scripts\python.exe DOSer.py`.
+If you on Linux run `setupenv.sh` and run python file using `./venv/bin/python3 DOSer.py`, on Windows run `setup.bat` and run python file using `.\venv\Scripts\python.exe DOSer.py`.
