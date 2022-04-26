@@ -7,6 +7,12 @@ Does not provide performance. It can serve as a guide for studying packages and 
  •Stable connection
  
  •Python 3.X.X
+ 
+ •Colorama 0.4.4
+ 
+ •Requests 2.27.1
+ 
+ •tqdm 4.64.0
 
 # How to Use:
 
